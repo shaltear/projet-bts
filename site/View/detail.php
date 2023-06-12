@@ -24,7 +24,13 @@ $timeAnnonce = $req["time"];
 
   //on fait un compteur pour comptabiliser les vue pour une annonce. Pour une vue dans l'annonce ida, on ajoute +1 dans la BDD dans la colonne vue
   //on n'ajoute pas de vue dans le cas où celui qui accède aux détail est le vendeur du produit  
-if($uid != $vendeur ){
+if(isset($_SESSION["uid"])){ 
+    if($uid != $vendeur ){
+        $req = $pdo->prepare("UPDATE annonce SET vue = :vue WHERE ida = :ida");
+        $req->execute(array("vue" => $vue+1, "ida" => $ida));  
+    }
+}  
+else{
     $req = $pdo->prepare("UPDATE annonce SET vue = :vue WHERE ida = :ida");
     $req->execute(array("vue" => $vue+1, "ida" => $ida));  
 }
